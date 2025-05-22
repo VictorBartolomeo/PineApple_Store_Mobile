@@ -1,24 +1,20 @@
-import {StyleSheet,View, Text} from "react-native";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {ThemedView} from "@/components/ThemedView";
-import {ThemedText} from "@/components/ThemedText";
+import {StyleSheet} from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {TestComponent} from "@/components/TestComponent";
 
 
 export default function Test() {
 
-    const insets=useSafeAreaInsets();
-    console.log(insets)
     return(
-        <ThemedView style={{marginTop:insets.top, marginBottom:insets.bottom, marginLeft:insets.left, marginRight:insets.right}}>
-            <ThemedText style={styles.monTexte}>MAIS TON GROS WIFI DE GOLMON</ThemedText>
-        </ThemedView>
+        <SafeAreaView style={styles.monTexte}>
+        <TestComponent value={"tutu"} callback={()=>console.log("WOUF")}/>
+        </SafeAreaView>
     );
 }
 
 const styles=StyleSheet.create({
-
     monTexte:{
-        color: "salmon"
+        color: "salmon",
+        backgroundColor: "salmon"
     }
-
 })
