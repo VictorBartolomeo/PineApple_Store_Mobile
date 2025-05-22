@@ -21,11 +21,11 @@ export default function HomeScreen() {
             <ThemedText>Yo</ThemedText>
         </ThemedView>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome grosse école de con avec ton wifi de merde!</ThemedText>
+        <ThemedText type="title">Titre</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Ramener des bonnes poires</ThemedText>
+        <ThemedText type="subtitle">Step 1: On apaise son âme</ThemedText>
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
           Press{' '}
@@ -40,13 +40,13 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Faire croire qu'on a l'infrastructure</ThemedText>
+        <ThemedText type="subtitle">Step 2: Mais quand même on répare internet</ThemedText>
         <ThemedText>
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: MDR YOU GOT TRAPPED gros con, bon chômage</ThemedText>
+        <ThemedText type="subtitle">Step 3: Hol'on hol'on</ThemedText>
         <ThemedText>
           {`When you're ready, run `}
           <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
