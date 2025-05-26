@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 import {Button, Input} from "tamagui";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Controller, useForm} from "react-hook-form";
+import {ThemedText} from "@/components/ThemedText";
 
 
 export default function ConnectionScreen() {
@@ -22,7 +23,7 @@ export default function ConnectionScreen() {
         },
     })
 
-    const onValidForm = (data) => {
+    const onValidForm = (data: any) => {
         console.log(data)
     }
 
@@ -32,6 +33,7 @@ export default function ConnectionScreen() {
                 control={control}
                 rules={{
                     required: true,
+                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
                     <Input
@@ -44,6 +46,8 @@ export default function ConnectionScreen() {
                 )}
                 name="email"
             />
+            {errors.email?.type === "required" && <ThemedText>L&#39;email est requis mon gaté</ThemedText>}
+            {errors.email?.type === "pattern" && <ThemedText>L&#39;email est mal formé</ThemedText>}
 
             <Controller
                 control={control}
@@ -61,6 +65,7 @@ export default function ConnectionScreen() {
                 )}
                 name="password"
             />
+            {errors.password && <ThemedText>Le mot de passe est requis mon gaté</ThemedText>}
 
             <Button size="$3" themeInverse onPress={handleSubmit(onValidForm)}>
                 Se connecter
