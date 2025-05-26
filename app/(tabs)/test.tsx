@@ -7,7 +7,7 @@ export default function Test() {
 
     return(
         <SafeAreaView style={styles.monTexte}>
-        <TestComponent value={"tutu"} callback={()=>console.log("WOUF")}/>
+        <TestComponent/>
         </SafeAreaView>
     );
 }
@@ -15,6 +15,9 @@ export default function Test() {
 const styles=StyleSheet.create({
     monTexte:{
         color: "salmon",
-        backgroundColor: "salmon"
+        backgroundColor: "salmon",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
     }
 })
