@@ -4,8 +4,6 @@ import {useEffect, useState} from "react";
 import {User} from "@/models/User";
 import {UserCard} from "@/components/UserCard";
 
-type TestComponentProps = { value: string, callback: (event: GestureResponderEvent) => void }
-
 export function TestComponent() {
 
     const [numberClick, setNumberClick] = useState(0)
