@@ -7,6 +7,7 @@ type TestComponentProps = { value: string, callback: (event: GestureResponderEve
 export function TestComponent() {
 
     const [numberClick, setNumberClick] = useState(0)
+    type User = {name:string}
     // const [usersList, setUsersList] = useState<any[]>([])
 
     // useEffect(() => {
@@ -18,7 +19,12 @@ export function TestComponent() {
     // }, []);
 
 
-    const [users, setUsers] = useState<{ name: string }[]>([])
+    const [users, setUsers] = useState<User[]>([])
+    const UserCard = ({user}: {user : User})=> (
+        <ThemedText>
+            {user.name}
+        </ThemedText>
+    );
 
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
@@ -36,7 +42,7 @@ export function TestComponent() {
         <ThemedText style={styles.number}>{numberClick}</ThemedText>
         <FlatList data={users}
                   renderItem={
-            ({item}) => (<ThemedText>{item.name}</ThemedText>)
+                      ({item}) => (<UserCard user={item}></UserCard>)
         }/>
     </>
 }
