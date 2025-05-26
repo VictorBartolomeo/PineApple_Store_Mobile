@@ -1,4 +1,4 @@
-import {GestureResponderEvent, Pressable, StyleSheet} from 'react-native';
+import {FlatList, GestureResponderEvent, Pressable, StyleSheet} from 'react-native';
 import {ThemedText} from "@/components/ThemedText";
 import {useEffect, useState} from "react";
 
@@ -7,14 +7,23 @@ type TestComponentProps = { value: string, callback: (event: GestureResponderEve
 export function TestComponent() {
 
     const [numberClick, setNumberClick] = useState(0)
-    const [usersList, setUsersList] = useState<any[]>([])
+    // const [usersList, setUsersList] = useState<any[]>([])
+
+    // useEffect(() => {
+    //     fetch("https://jsonplaceholder.typicode.com/users")
+    //         .then(res => res.json())
+    //         .then(users => setUsersList(users.map(
+    //             (user: {name : string}) =>
+    //             <ThemedText key={user.name}>{user.name}</ThemedText>)))
+    // }, []);
+
+
+    const [users, setUsers] = useState<{ name: string }[]>([])
 
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(res => res.json())
-            .then(users => setUsersList(users.map(
-                (user: {name : string}) =>
-                <ThemedText key={user.name}>{user.name}</ThemedText>)))
+            .then(users => setUsers(users))
     }, []);
 
     return <>
@@ -25,7 +34,10 @@ export function TestComponent() {
             <ThemedText style={styles.button}>Press me !</ThemedText>
         </Pressable>
         <ThemedText style={styles.number}>{numberClick}</ThemedText>
-        {usersList}
+        <FlatList data={users}
+                  renderItem={
+            ({item}) => (<ThemedText>{item.name}</ThemedText>)
+        }/>
     </>
 }
 
@@ -44,8 +56,8 @@ const styles = StyleSheet.create({
         margin: 70,
         shadowColor: "white"
     },
-    number:{
-        fontSize:20,
+    number: {
+        fontSize: 20,
         color: "black",
     }
 })
