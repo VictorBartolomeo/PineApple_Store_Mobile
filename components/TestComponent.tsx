@@ -1,30 +1,17 @@
 import {FlatList, GestureResponderEvent, Pressable, StyleSheet} from 'react-native';
 import {ThemedText} from "@/components/ThemedText";
 import {useEffect, useState} from "react";
+import {User} from "@/models/User";
+import {UserCard} from "@/components/UserCard";
 
 type TestComponentProps = { value: string, callback: (event: GestureResponderEvent) => void }
 
 export function TestComponent() {
 
     const [numberClick, setNumberClick] = useState(0)
-    type User = {name:string}
-    // const [usersList, setUsersList] = useState<any[]>([])
-
-    // useEffect(() => {
-    //     fetch("https://jsonplaceholder.typicode.com/users")
-    //         .then(res => res.json())
-    //         .then(users => setUsersList(users.map(
-    //             (user: {name : string}) =>
-    //             <ThemedText key={user.name}>{user.name}</ThemedText>)))
-    // }, []);
 
 
     const [users, setUsers] = useState<User[]>([])
-    const UserCard = ({user}: {user : User})=> (
-        <ThemedText>
-            {user.name}
-        </ThemedText>
-    );
 
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
