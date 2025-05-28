@@ -23,8 +23,15 @@ export default function ConnectionScreen() {
         },
     })
 
-    const onValidForm = (data: any) => {
-        console.log(data)
+    const onValidForm = (data: FormData) => {
+        const options : RequestInit ={
+            method : "POST",
+            headers : { "Content-Type" : "application/json" },
+            body : JSON.stringify(data)
+        }
+        fetch("http://10.51.209.187:8080/login", options)
+            .then(response => response.text())
+            .then(jwt => console.log(jwt))
     }
 
     return (
@@ -65,7 +72,7 @@ export default function ConnectionScreen() {
                 )}
                 name="password"
             />
-            {errors.password && <ThemedText>Le mot de passe est requis mon gaté</ThemedText>}
+            {errors.password?.type === "required" && <ThemedText>Le mot de passe est requis mon gaté</ThemedText>}
 
             <Button size="$3" themeInverse onPress={handleSubmit(onValidForm)}>
                 Se connecter
