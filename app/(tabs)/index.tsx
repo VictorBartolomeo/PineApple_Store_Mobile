@@ -1,79 +1,139 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { NierTheme, NierStyles } from '@/constants/NierTheme';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
+    return (
+        <SafeAreaView style={NierStyles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+                {/* Header Section */}
+                <ThemedView variant="elevated" style={styles.headerCard}>
+                    <ThemedText type="system" style={styles.systemInfo}>
+                        [SYSTEM] YoRHa Interface v2.1.7{'\n'}
+                        [STATUS] All systems operational{'\n'}
+                        [USER] Welcome, Android
+                    </ThemedText>
+                </ThemedView>
 
-        <ThemedView>
-            <ThemedText>Yo</ThemedText>
-        </ThemedView>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Titre</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: On apaise son âme</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Mais quand même on répare internet</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Hol'on hol'on</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+                {/* Main Title */}
+                <ThemedView style={styles.titleContainer}>
+                    <ThemedText type="title">MAIN_TERMINAL</ThemedText>
+                    <HelloWave />
+                </ThemedView>
+
+                {/* Mission Briefings */}
+                <ThemedView variant="card" style={styles.missionCard}>
+                    <ThemedText type="subtitle" style={styles.missionHeader}>
+                        [MISSION_001] Inner Peace Protocol
+                    </ThemedText>
+                    <ThemedText type="muted" style={styles.timestamp}>
+                        TIMESTAMP: {new Date().toISOString().split('T')[0]}
+                    </ThemedText>
+                    <ThemedText style={styles.missionText}>
+                        Objective: Maintain spiritual equilibrium while executing primary directives.
+                        {'\n\n'}
+                        Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to modify interface parameters.
+                        {'\n\n'}
+                        Debug Console Access: {' '}
+                        <ThemedText type="defaultSemiBold">
+                            {Platform.select({
+                                ios: '[CMD + D]',
+                                android: '[CMD + M]',
+                                web: '[F12]',
+                            })}
+                        </ThemedText>
+                    </ThemedText>
+                </ThemedView>
+
+                <ThemedView variant="card" style={styles.missionCard}>
+                    <ThemedText type="subtitle" style={styles.missionHeader}>
+                        [MISSION_002] Network Restoration
+                    </ThemedText>
+                    <ThemedText type="muted" style={styles.timestamp}>
+                        PRIORITY: HIGH
+                    </ThemedText>
+                    <ThemedText style={styles.missionText}>
+                        Objective: Repair global network infrastructure and restore communication protocols.
+                        {'\n\n'}
+                        Navigate to Explore tab for detailed mission parameters and available resources.
+                    </ThemedText>
+                </ThemedView>
+
+                <ThemedView variant="card" style={styles.missionCard}>
+                    <ThemedText type="subtitle" style={styles.missionHeader}>
+                        [MISSION_003] System Initialization
+                    </ThemedText>
+                    <ThemedText type="muted" style={styles.timestamp}>
+                        STATUS: STANDBY
+                    </ThemedText>
+                    <ThemedText style={styles.missionText}>
+                        Objective: Prepare for full system deployment.
+                        {'\n\n'}
+                        Execute command: <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>
+                        {'\n'}
+                        This will archive current configuration to <ThemedText type="defaultSemiBold">app-example</ThemedText>
+                        and initialize fresh deployment environment.
+                    </ThemedText>
+                </ThemedView>
+
+                {/* System Status */}
+                <ThemedView variant="surface" style={styles.statusCard}>
+                    <ThemedText type="system" style={styles.statusText}>
+                        [SYSTEM_STATUS]{'\n'}
+                        ├── Core Functions: ONLINE{'\n'}
+                        ├── Memory Usage: 67.3%{'\n'}
+                        ├── Network Status: CONNECTED{'\n'}
+                        └── Mission Queue: 3 ACTIVE
+                    </ThemedText>
+                </ThemedView>
+            </ScrollView>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    scrollContent: {
+        padding: NierTheme.spacing.md,
+        gap: NierTheme.spacing.md,
+    },
+    headerCard: {
+        padding: NierTheme.spacing.md,
+        marginBottom: NierTheme.spacing.sm,
+    },
+    systemInfo: {
+        lineHeight: 16,
+    },
+    titleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: NierTheme.spacing.lg,
+    },
+    missionCard: {
+        padding: NierTheme.spacing.md,
+        marginVertical: NierTheme.spacing.xs,
+    },
+    missionHeader: {
+        marginBottom: NierTheme.spacing.xs,
+    },
+    timestamp: {
+        marginBottom: NierTheme.spacing.sm,
+        opacity: 0.7,
+    },
+    missionText: {
+        lineHeight: 18,
+    },
+    statusCard: {
+        padding: NierTheme.spacing.md,
+        marginTop: NierTheme.spacing.lg,
+    },
+    statusText: {
+        lineHeight: 16,
+        letterSpacing: 0.5,
+    },
 });
