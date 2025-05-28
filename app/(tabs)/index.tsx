@@ -1,35 +1,83 @@
 import {Image} from 'expo-image';
 import {Platform, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-import {HelloWave} from '@/components/HelloWave';
 import {ThemedText} from '@/components/ThemedText';
 import {ThemedView} from '@/components/ThemedView';
 import {NierStyles, NierTheme} from '@/constants/NierTheme';
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import * as SecureStore from "expo-secure-store";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {Course} from "@/models/Course";
+
+const formatDate = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    };
+    return date.toLocaleDateString('fr-FR', options);
+};
+
+const formatTime = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+};
+
+const CourseCard = ({ course }: { course: Course }) => {
+    const formattedDate = formatDate(course.startDatetime);
+    const startTime = formatTime(course.startDatetime);
+    const endTime = formatTime(course.endDatetime);
+
+    const spotsLeft = course.maxCapacity - course.registrations.length;
+
+    return (
+        <ThemedView variant="card" style={styles.courseCard}>
+            <ThemedText type="subtitle" style={styles.missionHeader}>
+                [{course.courseType.name}] {course.title}
+            </ThemedText>
+            <ThemedText type="muted" style={styles.timestamp}>
+                DATE: {formattedDate} • {startTime}-{endTime}
+            </ThemedText>
+            <ThemedText style={styles.missionText}>
+                {course.description}
+                {'\n\n'}
+                <ThemedText type="system">
+                    Places disponibles: {spotsLeft}/{course.maxCapacity}
+                </ThemedText>
+            </ThemedText>
+        </ThemedView>
+    );
+};
 
 export default function HomeScreen() {
-
-    const jwt = SecureStore.getItem("token")
+    const [upcomingCourses, setUpcomingCourses] = useState<Course[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        async function fetchCourses() {
+            try {
+                const jwt = await SecureStore.getItemAsync("token");
 
-        if (jwt) {
-            const options: RequestInit = {
-                method: "GET",
-                headers: {"Authorization": "Bearer " + jwt},
+                if (jwt) {
+                    const options: RequestInit = {
+                        method: "GET",
+                        headers: {"Authorization": "Bearer " + jwt},
+                    };
+
+                    const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/coach/2/courses/upcoming", options);
+                    const courses = await response.json();
+                    setUpcomingCourses(courses);
+                }
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+            } finally {
+                setIsLoading(false);
             }
-
-            fetch("http://10.51.209.187:8080/coach/2/courses/upcoming", options)
-                .then(response => response.json())
-                .then(courses => {
-                    console.log(courses)
-                })
         }
-    })
 
+        fetchCourses();
+    }, []);
 
     return (
         <SafeAreaView style={NierStyles.container}>
@@ -47,7 +95,6 @@ export default function HomeScreen() {
 
                 <ThemedView style={styles.titleContainer}>
                     <ThemedText type="title">MAIN_TERMINAL</ThemedText>
-                    <HelloWave/>
                 </ThemedView>
 
                 <ThemedView variant="card" style={styles.missionCard}>
@@ -74,37 +121,24 @@ export default function HomeScreen() {
                     </ThemedText>
                 </ThemedView>
 
-                <ThemedView variant="card" style={styles.missionCard}>
-                    <ThemedText type="subtitle" style={styles.missionHeader}>
-                        [MISSION_002] Network Restoration
-                    </ThemedText>
-                    <ThemedText type="muted" style={styles.timestamp}>
-                        PRIORITY: HIGH
-                    </ThemedText>
-                    <ThemedText style={styles.missionText}>
-                        Objective: Repair global network infrastructure and restore communication protocols.
-                        {'\n\n'}
-                        Navigate to Explore tab for detailed mission parameters and available resources.
-                    </ThemedText>
+                {/* Section des cours à venir */}
+                <ThemedView style={styles.titleContainer}>
+                    <ThemedText type="title">COURS_À_VENIR</ThemedText>
                 </ThemedView>
 
-                <ThemedView variant="card" style={styles.missionCard}>
-                    <ThemedText type="subtitle" style={styles.missionHeader}>
-                        [MISSION_003] System Initialization
-                    </ThemedText>
-                    <ThemedText type="muted" style={styles.timestamp}>
-                        STATUS: STANDBY
-                    </ThemedText>
-                    <ThemedText style={styles.missionText}>
-                        Objective: Prepare for full system deployment.
-                        {'\n\n'}
-                        Execute command: <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>
-                        {'\n'}
-                        This will archive current configuration to <ThemedText
-                        type="defaultSemiBold">app-example</ThemedText>
-                        and initialize fresh deployment environment.
-                    </ThemedText>
-                </ThemedView>
+                {isLoading ? (
+                    <ThemedView variant="surface" style={styles.statusCard}>
+                        <ThemedText type="system">Chargement des cours...</ThemedText>
+                    </ThemedView>
+                ) : upcomingCourses.length > 0 ? (
+                    upcomingCourses.map(course => (
+                        <CourseCard key={course.id} course={course} />
+                    ))
+                ) : (
+                    <ThemedView variant="surface" style={styles.statusCard}>
+                        <ThemedText type="system">Aucun cours à venir</ThemedText>
+                    </ThemedView>
+                )}
 
                 {/* System Status */}
                 <ThemedView variant="surface" style={styles.statusCard}>
@@ -140,6 +174,10 @@ const styles = StyleSheet.create({
         marginVertical: NierTheme.spacing.lg,
     },
     missionCard: {
+        padding: NierTheme.spacing.md,
+        marginVertical: NierTheme.spacing.xs,
+    },
+    courseCard: {
         padding: NierTheme.spacing.md,
         marginVertical: NierTheme.spacing.xs,
     },
