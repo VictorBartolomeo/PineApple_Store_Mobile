@@ -34,7 +34,7 @@ export default function ConnectionScreen() {
             headers : { "Content-Type" : "application/json" },
             body : JSON.stringify(data)
         }
-        fetch("http://10.51.209.187:8080/login", options)
+        fetch( process.env.EXPO_PUBLIC_API_URL+"/login", options)
             .then(response => response.text())
             .then(jwt => {
                 console.log(jwt)
