@@ -1,17 +1,42 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {Image} from 'expo-image';
+import {Platform, StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-import { HelloWave } from '@/components/HelloWave';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { NierTheme, NierStyles } from '@/constants/NierTheme';
+import {HelloWave} from '@/components/HelloWave';
+import {ThemedText} from '@/components/ThemedText';
+import {ThemedView} from '@/components/ThemedView';
+import {NierStyles, NierTheme} from '@/constants/NierTheme';
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import * as SecureStore from "expo-secure-store";
+import {useEffect} from "react";
 
 export default function HomeScreen() {
+
+    const jwt = SecureStore.getItem("token")
+
+    useEffect(() => {
+
+        if (jwt) {
+            const options: RequestInit = {
+                method: "GET",
+                headers: {"Authorization": "Bearer " + jwt},
+            }
+
+            fetch("http://10.51.209.187:8080/coach/2/courses/upcoming", options)
+                .then(response => response.json())
+                .then(courses => {
+                    console.log(courses)
+                })
+        }
+    })
+
+
     return (
         <SafeAreaView style={NierStyles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
-                {/* Header Section */}
+            <ParallaxScrollView headerBackgroundColor={{light: '#D0D0D0', dark: '#353636'}} headerImage={
+                <Image source={'@/assets/images/react-logo.png'} style={styles.missionHeader}/>
+            }
+            >
                 <ThemedView variant="elevated" style={styles.headerCard}>
                     <ThemedText type="system" style={styles.systemInfo}>
                         [SYSTEM] YoRHa Interface v2.1.7{'\n'}
@@ -20,13 +45,11 @@ export default function HomeScreen() {
                     </ThemedText>
                 </ThemedView>
 
-                {/* Main Title */}
                 <ThemedView style={styles.titleContainer}>
                     <ThemedText type="title">MAIN_TERMINAL</ThemedText>
-                    <HelloWave />
+                    <HelloWave/>
                 </ThemedView>
 
-                {/* Mission Briefings */}
                 <ThemedView variant="card" style={styles.missionCard}>
                     <ThemedText type="subtitle" style={styles.missionHeader}>
                         [MISSION_001] Inner Peace Protocol
@@ -37,7 +60,8 @@ export default function HomeScreen() {
                     <ThemedText style={styles.missionText}>
                         Objective: Maintain spiritual equilibrium while executing primary directives.
                         {'\n\n'}
-                        Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to modify interface parameters.
+                        Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to modify interface
+                        parameters.
                         {'\n\n'}
                         Debug Console Access: {' '}
                         <ThemedText type="defaultSemiBold">
@@ -76,7 +100,8 @@ export default function HomeScreen() {
                         {'\n\n'}
                         Execute command: <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>
                         {'\n'}
-                        This will archive current configuration to <ThemedText type="defaultSemiBold">app-example</ThemedText>
+                        This will archive current configuration to <ThemedText
+                        type="defaultSemiBold">app-example</ThemedText>
                         and initialize fresh deployment environment.
                     </ThemedText>
                 </ThemedView>
@@ -91,7 +116,7 @@ export default function HomeScreen() {
                         └── Mission Queue: 3 ACTIVE
                     </ThemedText>
                 </ThemedView>
-            </ScrollView>
+            </ParallaxScrollView>
         </SafeAreaView>
     );
 }
