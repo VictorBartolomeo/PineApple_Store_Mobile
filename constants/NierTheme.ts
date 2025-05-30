@@ -150,4 +150,13 @@ export const NierStyles = {
         borderLeftColor: NierTheme.colors.accent,
         paddingLeft: NierTheme.spacing.sm,
     },
+    // Dans NierStyles ou GlobalStyles
+    quizOption: {
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderColor: '#FFFFFF',
+        padding: 15,
+        marginVertical: 5,
+        borderRadius: 5,
+    },
 };
